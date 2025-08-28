@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkTracker - Produtividade Inteligente</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-rocket"></i>
+                    WorkTracker
+                </h1>
+                <div class="points-display">
+                    <i class="fas fa-star"></i>
+                    <span id="totalPoints">0</span> Pontos
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <button class="nav-btn active" data-view="timer">
+                <i class="fas fa-clock"></i>
+                <span>Foco</span>
+            </button>
+            <button class="nav-btn" data-view="reports">
+                <i class="fas fa-chart-line"></i>
+                <span>Relatórios</span>
+            </button>
+            <button class="nav-btn" data-view="store">
+                <i class="fas fa-gift"></i>
+                <span>Loja</span>
+            </button>
+            <button class="nav-btn" data-view="settings">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Timer View -->
+            <div id="timer-view" class="view active">
+                <div class="timer-container">
+                    <div class="daily-progress">
+                        <h3>Meta Diária</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="dailyProgressFill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="dailyPoints">0</span> / <span id="dailyGoal">1000</span> Pontos
+                        </div>
+                    </div>
+
+                    <div class="timer-display">
+                        <div class="timer-circle">
+                            <div class="timer-text">
+                                <span id="timerMinutes">25</span>:<span id="timerSeconds">00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timer-controls" id="timerControls">
+                        <div class="preset-buttons">
+                            <button class="preset-btn" data-minutes="15">15min</button>
+                            <button class="preset-btn active" data-minutes="25">25min</button>
+                            <button class="preset-btn" data-minutes="45">45min</button>
+                            <button class="preset-btn" data-minutes="60">60min</button>
+                        </div>
+                        
+                        <div class="custom-time">
+                            <input type="number" id="customMinutes" min="1" max="180" placeholder="Minutos">
+                            <button id="setCustomTime">Definir</button>
+                        </div>
+
+                        <button id="startTimer" class="start-btn">
+                            <i class="fas fa-play"></i>
+                            Iniciar Foco
+                        </button>
+                    </div>
+
+                    <div class="timer-active" id="timerActive" style="display: none;">
+                        <button id="cancelTimer" class="cancel-btn">
+                            <i class="fas fa-stop"></i>
+                            Cancelar Ciclo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports View -->
+            <div id="reports-view" class="view">
+                <div class="reports-container">
+                    <div class="reports-header">
+                        <h2>Relatório de Desempenho</h2>
+                        <div class="month-navigation">
+                            <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                            <span id="currentMonth">Janeiro 2024</span>
+                            <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="month-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Média do Mês:</span>
+                            <span id="monthAverage">0</span> pontos/dia
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Metas Atingidas:</span>
+                            <span id="goalsAchieved">0</span> dias
+                        </div>
+                    </div>
+
+                    <div class="calendar" id="calendar"></div>
+                </div>
+            </div>
+
+            <!-- Store View -->
+            <div id="store-view" class="view">
+                <div class="store-container">
+                    <div class="store-header">
+                        <h2>Loja de Recompensas</h2>
+                        <button id="addReward" class="add-btn">
+                            <i class="fas fa-plus"></i>
+                            Nova Recompensa
+                        </button>
+                    </div>
+
+                    <div class="store-tabs">
+                        <button class="tab-btn active" data-tab="available">Disponíveis</button>
+                        <button class="tab-btn" data-tab="archived">Arquivadas</button>
+                        <button class="tab-btn" data-tab="history">Histórico</button>
+                    </div>
+
+                    <div class="store-content">
+                        <div id="available-rewards" class="rewards-grid"></div>
+                        <div id="archived-rewards" class="rewards-grid" style="display: none;"></div>
+                        <div id="rewards-history" class="history-list" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settings-view" class="view">
+                <div class="settings-container">
+                    <h2>Configurações</h2>
+                    
+                    <div class="settings-section">
+                        <h3>Aparência</h3>
+                        <div class="setting-item">
+                            <label for="accentColor">Cor de Destaque:</label>
+                            <input type="color" id="accentColor" value="#00d4ff">
+                        </div>
+                        <div class="setting-item">
+                            <label for="secondaryColor">Cor Secundária:</label>
+                            <input type="color" id="secondaryColor" value="#0099cc">
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Metas e Pontuação</h3>
+                        <div class="setting-item">
+                            <label for="dailyGoalSetting">Meta Diária (pontos):</label>
+                            <input type="number" id="dailyGoalSetting" min="100" max="5000" value="1000">
+                        </div>
+                        <div class="setting-item">
+                            <label for="goalBonus">Bônus por Meta Atingida:</label>
+                            <input type="number" id="goalBonus" min="0" max="500" value="50">
+                        </div>
+                        <div class="setting-item">
+                            <label for="timeWeight">Peso do Tempo:</label>
+                            <input type="number" id="timeWeight" min="0.1" max="10" step="0.1" value="2">
+                        </div>
+                        <div class="setting-item">
+                            <label for="performanceWeight">Peso do Desempenho:</label>
+                            <input type="number" id="performanceWeight" min="1" max="100" step="1" value="20">
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Dados</h3>
+                        <div class="data-controls">
+                            <button id="exportData" class="data-btn">
+                                <i class="fas fa-download"></i>
+                                Exportar Dados
+                            </button>
+                            <button id="importData" class="data-btn">
+                                <i class="fas fa-upload"></i>
+                                Importar Dados
+                            </button>
+                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="cycleModal" class="modal">
+        <div class="modal-content">
+            <h3>Registrar Ciclo de Trabalho</h3>
+            <form id="cycleForm">
+                <div class="form-group">
+                    <label for="cycleTitle">Título:</label>
+                    <input type="text" id="cycleTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="cycleDescription">Descrição:</label>
+                    <textarea id="cycleDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="cycleRating">Avaliação (0-5):</label>
+                    <div class="rating-input">
+                        <input type="range" id="cycleRating" min="0" max="5" value="3">
+                        <span id="ratingValue">3</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancelCycle">Cancelar</button>
+                    <button type="submit">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="cancelModal" class="modal">
+        <div class="modal-content">
+            <h3>Cancelar Ciclo</h3>
+            <p>O que deseja fazer com o tempo trabalhado?</p>
+            <div class="modal-actions">
+                <button id="discardCycle">Descartar Ciclo</button>
+                <button id="saveProgress">Salvar Progresso</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <h3 id="rewardModalTitle">Nova Recompensa</h3>
+            <form id="rewardForm">
+                <div class="form-group">
+                    <label for="rewardTitle">Título:</label>
+                    <input type="text" id="rewardTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="rewardDescription">Descrição:</label>
+                    <textarea id="rewardDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="rewardCost">Custo (pontos):</label>
+                    <input type="number" id="rewardCost" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="rewardImage">URL da Imagem (opcional):</label>
+                    <input type="url" id="rewardImage">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancelReward">Cancelar</button>
+                    <button type="submit">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="dayModal" class="modal">
+        <div class="modal-content">
+            <h3 id="dayModalTitle">Detalhes do Dia</h3>
+            <div id="dayModalContent"></div>
+            <div class="modal-actions">
+                <button id="closeDayModal">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
