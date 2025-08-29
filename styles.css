@@ -253,6 +253,16 @@ body {
     align-items: center;
     gap: 2rem;
     width: 100%;
+    justify-content: center;
+}
+
+.timer-active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+    justify-content: center;
 }
 
 .preset-buttons {
@@ -260,6 +270,7 @@ body {
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
+    width: 100%;
 }
 
 .preset-btn {
@@ -289,6 +300,8 @@ body {
     display: flex;
     gap: 1rem;
     align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .custom-time input {
@@ -863,6 +876,8 @@ body {
     border: 1px solid var(--border-color);
     box-shadow: 0 20px 60px rgba(var(--secondary-color-rgb), 0.2);
     animation: slideUp 0.3s ease;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 @keyframes slideUp {
@@ -1119,3 +1134,66 @@ body {
 
 .hidden { display: none !important; }
 .visible { display: block !important; }
+
+/* Day Modal Content Styles */
+#dayModalContent {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+#dayModalContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+#dayModalContent::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+#dayModalContent::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+#dayModalContent::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+.day-cycle {
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.cycle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.cycle-header h4 {
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.cycle-points {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.cycle-description {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.cycle-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}

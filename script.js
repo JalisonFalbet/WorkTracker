@@ -329,6 +329,15 @@ class WorkTracker {
         this.showModal('cycleModal');
     }
 
+    // Função para obter data local no formato YYYY-MM-DD
+    getLocalDateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     saveCycle() {
         const title = document.getElementById('cycleTitle').value;
         const description = document.getElementById('cycleDescription').value;
@@ -344,7 +353,7 @@ class WorkTracker {
         // Criar ciclo
         const cycle = {
             id: Date.now(),
-            date: new Date().toISOString().split('T')[0],
+            date: this.getLocalDateString(),
             title,
             description,
             rating,
@@ -361,7 +370,7 @@ class WorkTracker {
         const todayPoints = this.getTodayPoints();
         if (todayPoints >= this.data.settings.dailyGoal) {
             // Verificar se já ganhou bônus hoje
-            const today = new Date().toISOString().split('T')[0];
+            const today = this.getLocalDateString();
             const todayCycles = this.data.cycles.filter(c => c.date === today);
             const bonusAlreadyGiven = todayCycles.some(c => c.goalBonus);
 
@@ -546,7 +555,7 @@ class WorkTracker {
     }
 
     getTodayPoints() {
-        const today = new Date().toISOString().split('T')[0];
+        const today = this.getLocalDateString();
         return this.getDayPoints(today);
     }
 
@@ -580,48 +589,6 @@ class WorkTracker {
             `;
             content.appendChild(cycleElement);
         });
-
-        // Adicionar estilos para os detalhes do dia
-        const style = document.createElement('style');
-        style.textContent = `
-            .day-cycle {
-                background: var(--bg-tertiary);
-                border-radius: 8px;
-                padding: 1rem;
-                margin-bottom: 1rem;
-                border: 1px solid var(--border-color);
-            }
-            .cycle-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 0.5rem;
-            }
-            .cycle-header h4 {
-                color: var(--text-primary);
-                margin: 0;
-            }
-            .cycle-points {
-                color: var(--primary-color);
-                font-weight: 600;
-            }
-            .cycle-description {
-                color: var(--text-secondary);
-                margin-bottom: 0.5rem;
-                line-height: 1.4;
-            }
-            .cycle-meta {
-                display: flex;
-                gap: 1rem;
-                font-size: 0.9rem;
-                color: var(--text-muted);
-            }
-        `;
-        
-        if (!document.getElementById('day-details-style')) {
-            style.id = 'day-details-style';
-            document.head.appendChild(style);
-        }
 
         this.showModal('dayModal');
     }
